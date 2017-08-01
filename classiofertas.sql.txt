@@ -1,0 +1,176 @@
+/*
+SQLyog Enterprise - MySQL GUI v8.1 
+MySQL - 5.5.5-10.1.24-MariaDB : Database - classiofertas
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`classiofertas` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `classiofertas`;
+
+/*Table structure for table `tb_categoria` */
+
+DROP TABLE IF EXISTS `tb_categoria`;
+
+CREATE TABLE `tb_categoria` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tb_produto_id` int(10) unsigned NOT NULL,
+  `tb_oferta_id` int(10) unsigned NOT NULL,
+  `tb_sub_categoria_id` int(10) unsigned NOT NULL,
+  `cod` int(10) unsigned DEFAULT NULL,
+  `desc_cat` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tb_categoria_FKIndex1` (`tb_sub_categoria_id`),
+  KEY `tb_categoria_FKIndex2` (`tb_oferta_id`),
+  KEY `tb_categoria_FKIndex3` (`tb_produto_id`),
+  CONSTRAINT `tb_categoria_ibfk_1` FOREIGN KEY (`tb_sub_categoria_id`) REFERENCES `tb_sub_categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_categoria_ibfk_2` FOREIGN KEY (`tb_oferta_id`) REFERENCES `tb_oferta` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_categoria_ibfk_3` FOREIGN KEY (`tb_produto_id`) REFERENCES `tb_produto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tb_categoria` */
+
+LOCK TABLES `tb_categoria` WRITE;
+
+UNLOCK TABLES;
+
+/*Table structure for table `tb_oferta` */
+
+DROP TABLE IF EXISTS `tb_oferta`;
+
+CREATE TABLE `tb_oferta` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tb_sub_categoria_id` int(10) unsigned NOT NULL,
+  `tb_produto_id` int(10) unsigned NOT NULL,
+  `titulo_oferta` varchar(200) DEFAULT NULL,
+  `desc_oferta` longtext,
+  `qtd_indicacoes` int(10) unsigned DEFAULT NULL,
+  `tag` varchar(45) DEFAULT NULL,
+  `tp_oferta` int(10) unsigned DEFAULT NULL,
+  `dta_oferta` date DEFAULT NULL,
+  `hra_oferta` int(10) unsigned DEFAULT NULL,
+  `qtd_acessos` int(10) unsigned DEFAULT NULL,
+  `desativado` int(10) unsigned DEFAULT NULL,
+  `id_usuario` int(10) unsigned DEFAULT NULL,
+  `desc_categoria` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tb_oferta_FKIndex1` (`tb_produto_id`),
+  KEY `tb_oferta_FKIndex2` (`tb_sub_categoria_id`),
+  CONSTRAINT `tb_oferta_ibfk_1` FOREIGN KEY (`tb_produto_id`) REFERENCES `tb_produto` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_oferta_ibfk_2` FOREIGN KEY (`tb_sub_categoria_id`) REFERENCES `tb_sub_categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tb_oferta` */
+
+LOCK TABLES `tb_oferta` WRITE;
+
+UNLOCK TABLES;
+
+/*Table structure for table `tb_perfil` */
+
+DROP TABLE IF EXISTS `tb_perfil`;
+
+CREATE TABLE `tb_perfil` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cod` int(10) unsigned DEFAULT NULL,
+  `desc_cod` varchar(45) DEFAULT NULL,
+  `dta_criado` date DEFAULT NULL,
+  `hra_criado` time DEFAULT NULL,
+  `desativado` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tb_perfil` */
+
+LOCK TABLES `tb_perfil` WRITE;
+
+UNLOCK TABLES;
+
+/*Table structure for table `tb_produto` */
+
+DROP TABLE IF EXISTS `tb_produto`;
+
+CREATE TABLE `tb_produto` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tb_sub_categoria_id` int(10) unsigned NOT NULL,
+  `id_oferta` int(10) unsigned DEFAULT NULL,
+  `id_categoria` int(10) unsigned DEFAULT NULL,
+  `cod_prod` int(10) unsigned DEFAULT NULL,
+  `desc_2` int(10) unsigned DEFAULT NULL,
+  `valor` double DEFAULT NULL,
+  `qtd` int(10) unsigned DEFAULT NULL,
+  `desconto` float DEFAULT NULL,
+  `dta_criado` date DEFAULT NULL,
+  `hra_criado` time DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tb_produto_FKIndex1` (`tb_sub_categoria_id`),
+  CONSTRAINT `tb_produto_ibfk_1` FOREIGN KEY (`tb_sub_categoria_id`) REFERENCES `tb_sub_categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tb_produto` */
+
+LOCK TABLES `tb_produto` WRITE;
+
+UNLOCK TABLES;
+
+/*Table structure for table `tb_sub_categoria` */
+
+DROP TABLE IF EXISTS `tb_sub_categoria`;
+
+CREATE TABLE `tb_sub_categoria` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cod` int(10) unsigned DEFAULT NULL,
+  `desc_sub_cat` varchar(45) DEFAULT NULL,
+  `cod_cate` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tb_sub_categoria` */
+
+LOCK TABLES `tb_sub_categoria` WRITE;
+
+UNLOCK TABLES;
+
+/*Table structure for table `tb_usuario` */
+
+DROP TABLE IF EXISTS `tb_usuario`;
+
+CREATE TABLE `tb_usuario` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tb_oferta_id` int(10) unsigned NOT NULL,
+  `tb_perfil_id` int(10) unsigned NOT NULL,
+  `usuario` varchar(80) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `senha` varchar(12) DEFAULT NULL,
+  `id_perfil` int(10) unsigned DEFAULT NULL,
+  `dta_criado` date DEFAULT NULL,
+  `hra_criado` time DEFAULT NULL,
+  `desativado` int(10) unsigned DEFAULT NULL,
+  `nm_empresa` varchar(60) DEFAULT NULL,
+  `end_empresa` varchar(100) DEFAULT NULL,
+  `cidade` varchar(60) DEFAULT NULL,
+  `estado` varchar(2) DEFAULT NULL,
+  `cnpj` double DEFAULT NULL,
+  `site_empresa` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tb_usuario_FKIndex1` (`tb_perfil_id`),
+  KEY `tb_usuario_FKIndex2` (`tb_oferta_id`),
+  CONSTRAINT `tb_usuario_ibfk_1` FOREIGN KEY (`tb_perfil_id`) REFERENCES `tb_perfil` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `tb_usuario_ibfk_2` FOREIGN KEY (`tb_oferta_id`) REFERENCES `tb_oferta` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tb_usuario` */
+
+LOCK TABLES `tb_usuario` WRITE;
+
+UNLOCK TABLES;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
